@@ -4,4 +4,4 @@ __all__ = ['connect_mcu']
 
 # Cell
 def connect_mcu():
-    return
+    return True
