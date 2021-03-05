@@ -14,7 +14,7 @@ This module also distributes the CircuitPython ``code.py`` file for a Raspberry 
 
 Fill me in please! Don't forget code examples:
 
-```python
+```
 1+1
 ```
 
