@@ -8,6 +8,6 @@ modules = ["core.py"]
 
 doc_url = "https://durapensa.github.io/pico_pi_controller/"
 
-git_url = "https://github.com/durapensa/pico_pi_controller/tree/main/"
+git_url = "https://github.com/durapensa/pico_pi_controller/tree/master/"
 
 def custom_doc_links(name): return None
