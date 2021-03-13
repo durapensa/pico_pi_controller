@@ -1,13 +1,13 @@
 ---
 
-title: Pico Pi Controller
+title: pico_pi_controller
 
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A service interface for any Raspberry Pi like SBC to be monitored & controlled from a CircuitPython capable microcontroller."
-description: "A service interface for any Raspberry Pi like SBC to be monitored & controlled from a CircuitPython capable microcontroller."
+summary: "A service interface for one or more Raspberry Pi\* SBCs to be monitored & controlled by a Raspberry Pi Pico<sup>†</sup>, *using i2c*."
+description: "A service interface for one or more Raspberry Pi\* SBCs to be monitored & controlled by a Raspberry Pi Pico<sup>†</sup>, *using i2c*."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -31,8 +31,21 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Work in progress.</em></p>
-<p>This module also distributes the CircuitPython <code>code.py</code> file for a Raspberry Pi Pico configured as shown in the instructions below.</p>
+<h2 id="Requirements">Requirements<a class="anchor-link" href="#Requirements"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Work in progress.</em> <em>See Hardware &amp; Software Instructions below.</em></p>
+<ol>
+<li>The RPi* must have GPIO pins 18 &amp; 19 free for use by <code>pigpio</code> as SDA &amp; SCL of secondary i2c controller.</li>
+<li>RPi4 must have manual installaltion of <code>pigpio</code> for compatible i2c use.</li>
+<li>Pico<sup>†</sup> must be running CircuitPython-6.x.</li>
+<li>Pico<sup>†</sup> must have <code>adafruit_bus_device</code> &amp; <code>pico_pi_controller</code> CircuitPython libraries installed.</li>
+</ol>
+<p>* RPi 4/3/Zero, RPi4: GPIO pins 10 &amp; 11; <code>pigpio</code> enables use of the Broadcom SoC secondary i2c controller as a 'peripheral' device.</p>
+<p><sup>†</sup> or any CircuitPython-capable MCU.</p>
 
 </div>
 </div>
@@ -52,50 +65,177 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hardware-&amp;-Software-Instructions">Hardware &amp; Software Instructions<a class="anchor-link" href="#Hardware-&amp;-Software-Instructions"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Quick-Start">Quick Start<a class="anchor-link" href="#Quick-Start"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>If using the simple setup of one RPi controlled by a Pico. Additinal RPi may be added by repeating steps 1 &amp; 4.</em></p>
+<ol>
+<li><p>Connect RPi secondary i2c pins to Pico primary i2c pins <strong>SDA↔SDA  SCL↔SCL  GND↔GND</strong>:</p>
+<ol>
+<li>On RPi*, connect <a href="https://pinout.xyz/">GPIO pins</a> 18 (SDA), 19 (SCL) and GND (any GND pin), e.g. using <a href="https://www.adafruit.com/product/1951">Female/Female Jumper Wires</a>; color conventions may be found <a href="https://learn.adafruit.com/introducing-adafruit-stemma-qt/technical-specs">here</a>.</li>
+<li>On Pico†, connect wires from RPi (above) to the primary i2c bus, <a href="https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/pinouts">board pins</a> 4 (SDA), 5 (SCL), and GND (any GND pin).</li>
+</ol>
+</li>
+<li><p>Plug Pico into RPi USB port, e.g. using <a href="https://www.adafruit.com/product/898">MicroB to USB A cable</a>.</p>
+</li>
+<li><p>From RPi, install CircuitPython &amp; CircuitPython Library Bundle onto the Pico:</p>
+<ol>
+<li>On RPi, download <a href="https://circuitpython.org/downloads">CircuitPython</a> &amp; <a href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython">install it</a> on your Pico.</li>
+<li>On RPi, download &amp; unzip <a href="https://circuitpython.org/libraries">CircuitPython Library Bundle</a>, then copy from the <code>lib</code> folder <code>adafruit_bus_device</code> to the <code>lib</code> folder on your Pico (CIRCUITPY drive).</li>
+</ol>
+</li>
+<li><p>On RPi, install <code>pico_pi_controller</code> components.</p>
+<ol>
+<li>On RPi, install <code>pico_pi_controller</code> (e.g. <code>pip3 install pico_pi_controller</code>)</li>
+<li>On RPi, locate‡ &amp; copy <code>ppc-daemon.py</code> to the location of your choice and configure your system(s) to run the script on startup (it's a daemon), then reboot or manually run the daemon.</li>
+</ol>
+</li>
+<li>From RPi, install <code>pico_pi_controller</code> for CircuitPython onto the Pico.<ol>
+<li>On RPi, download &amp; unzip <code>pico_pi_controller</code> for CircuitPython, then copy from the <code>lib</code> folder <code>pico_pi_controller</code> to the <code>lib</code> folder on your Pico (CIRCUITPY drive).</li>
+</ol>
+</li>
+<li>Unplug the Pico from the RPi USB port and connect it to a reguar USB power source.</li>
+</ol>
+<p>* RPi4 uses GPIO pins 10 (SDA), 11 (SCL).</p>
+<p>† Other MCU boards will have different pinouts. If using an MCU board with a Qwiic or STEMMA QT connector, e.g. <a href="https://www.adafruit.com/product/4884">Adafruit Feather RP2040</a>, <a href="https://www.adafruit.com/product/4397">this cable</a> is useful.</p>
+<p>‡ locate the installed files, e.g. in <code>~/.local/lib/python3.7/site-packages/pico_pi_controller/examples</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="How-to-use">How to use<a class="anchor-link" href="#How-to-use"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Fill me in please! Don't forget code examples:</p>
+<p>Module examples</p>
 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span>
-</pre></div>
-
-    </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Next">Next<a class="anchor-link" href="#Next"> </a></h2>
 </div>
 </div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>2</pre>
 </div>
-
-</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>cleanup logging &amp; add more status types.</p>
+<p>add Pico initiated RPi shutdown, later poweroff (using PEN)</p>
+<ul>
+<li>if constant scanning of i2c is unworkable (mem frag from object create/delete), consider using button or message from RPi (specified RPi i2c address as 'console'?)</li>
+</ul>
+<p>logging with adafruit_logging.mpy</p>
+<p>expand LED status (NeoPixels)</p>
+<p>settings with config.py (just import the damed thing!) - less need with new classes</p>
+<p>add convention for RPi to report to Pico (over i2c) additional connections (gpio-poweroff, etc.), this to keep the Pico hands-off and config-free.</p>
+<p>notes: <a href="https://docs.micropython.org/en/latest/reference/mpyfiles.html">.mpy</a></p>
 
 </div>
 </div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pseudo-code">Pseudo-code<a class="anchor-link" href="#Pseudo-code"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>
+import adafruit_logging as logging
+import config
+...</p>
+<p>DEBUG = True
+LOGGING_LEVEL = logging.DEBUG
+BASE_SPEED = 0.5
+LOG_FILE = '/log.txt'
+logger.setLevel(config.LOGGING_LEVEL)
+&lt;/code&gt;</p>
+<p><a href="https://circuitpython.readthedocs.io/en/latest/shared-bindings/rtc/index.html">https://circuitpython.readthedocs.io/en/latest/shared-bindings/rtc/index.html</a>
+<code>
+    t = time.struct_time((2019,   7,    10,   17,  00,   0,    0,   -1,    -1))</p>
+
+<pre><code># you must set year, mon, date, hour, min, sec and weekday
+# yearday is not supported
+# isdst can be set but we don't do anything with it at this time
+print("Setting time to:", t)     # uncomment for debugging
+rtc.datetime = t
+print("Done!")
+</code></pre>
+<p>&lt;/code&gt;</p>
 
 </div>
-    {% endraw %}
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Future">Future<a class="anchor-link" href="#Future"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Packaging">Packaging<a class="anchor-link" href="#Packaging"> </a></h3><p>RPi: project name: pico_pi_controller (daemon exists in examples/)</p>
+<p><a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> (does most of the stuff in the-hitchhikers-guide-to-packaging)</p>
+<p><a href="https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html">https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html</a></p>
+<p><a href="https://packaging.python.org/guides/using-manifest-in/">https://packaging.python.org/guides/using-manifest-in/</a></p>
+<p>Pico: project name: pico_pi_controller (use same name? simple program exists in code.py)</p>
+<p><a href="https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/creating-a-library">Creating a library</a> with <a href="https://cookiecutter.readthedocs.io/en/latest/">CookieCutter</a></p>
+<p><code>pip3 install cookiecutter</code>
+<code>cookiecutter gh:adafruit/cookiecutter-adafruit-circuitpython</code></p>
+<p>library_description: CircuitPython library for Pi SBCs to be monitored &amp; controlled by a microcontroller board, e.g. a Pi Pico, using i2c.</p>
+<p>library_keywords: i2c pico pi sensors system shutdown load wifi PowerENable</p>
+<p><a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> ?</p>
+<h3 id="Pico-LEDs-(using-NeoPixel-Stick,-strip,-string,-etc.)">Pico LEDs (using NeoPixel Stick, strip, string, etc.)<a class="anchor-link" href="#Pico-LEDs-(using-NeoPixel-Stick,-strip,-string,-etc.)"> </a></h3><p>status mode: (get from Keep), booting, power, heartbeat (require 3 misses?), wifi, etc.</p>
+<p>button activates selection mode, lights activate from 0 for each connected pi, dim green with a short off blink, all at the same time. bright solid green indicates the selected device (pi blinks something too?), power button will poweroff selected pi. power'd off pi blinks red, power button powers on pi.</p>
+<h3 id="Pico-display-(SPI-or-I2C)">Pico display (SPI or I2C)<a class="anchor-link" href="#Pico-display-(SPI-or-I2C)"> </a></h3><p>TBD: display status for one or more pi. auto-scaled to display size &amp; number of pi. hostname?</p>
+<p>future future: use for selection, fwd, back.</p>
+<h3 id="Pico-registry-of-connected-RPis">Pico registry of connected RPis<a class="anchor-link" href="#Pico-registry-of-connected-RPis"> </a></h3><p>2 modes, non-stored &amp; stored.</p>
+<p>Non-stored: Pico will register any connected Pi on first connect and remember until reset.</p>
+<p>Stored: Pico will will register any connected Pi on first connect and remember thru resets.</p>
+<p>See <a href="https://learn.adafruit.com/circuitpython-essentials/circuitpython-storage">CircuitPython Storage</a></p>
+<h3 id="Capabilities-with-other-hardware-add-ons">Capabilities with other hardware add-ons<a class="anchor-link" href="#Capabilities-with-other-hardware-add-ons"> </a></h3><h4 id="Safe-shutdown-&amp;-startup-with-a-single-button">Safe shutdown &amp; startup with a single button<a class="anchor-link" href="#Safe-shutdown-&amp;-startup-with-a-single-button"> </a></h4><p><strong>Can be used with single button for all connected RPis</strong>
+Configure from RPi? i2c reports the GPIOs connected on the Pico side.</p>
+<p>Pico 2 GPIO:</p>
+<p>On→Off: RPi GPIO 3 (pin 5) to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?</p>
+<p>Off→On: RPi GPIO 26 to GND, using any Pico GPIO, only when RPi in PPC registry is online
+use gpio-shutdown,gpio_pin=26,active_low=1,gpio_pull=up</p>
+<p>Pico 1 GPIO:</p>
+<p>On: RPi GPIO 3 to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?</p>
+<p>Off: use i2c command to trigger systemd shutdown</p>
+<h4 id="Full-poweroff-&amp;-poweron-with-a-single-button">Full poweroff &amp; poweron with a single button<a class="anchor-link" href="#Full-poweroff-&amp;-poweron-with-a-single-button"> </a></h4><p>On→Off:</p>
+<ol>
+<li>above (safe shtudown for raspian), then </li>
+<li><code>dtoverlay=gpio-poweroff,active_low,gpiopin=14</code> to detect completed shutdown</li>
+<li>PEN pull low</li>
+</ol>
+<p>Off→On</p>
+<ol>
+<li>detect state (PPC registry will have state of RPi's PEN)</li>
+<li>PEN open (power detectable on 3.3V, RPi should boot, reappear on i2c bus)</li>
+</ol>
+<p>If PEN is pulled low, then the PMIC shuts down the on-board power supplies in a controlled manner. The current consumption is limited to about 3mA (the PWR LED is still illuminated, and the pull-up on PEN consumes current). It is intended to be used in conjunction with an external board (HAT) that provides a UPS-like or battery-operated function.</p>
+<p>Works like the <a href="https://www.instructables.com/HOW-TO-TURN-OFF-RASPBERRY-PI-PROPERLY/">exampe</a> using a <a href="https://www.pololu.com/product/2808">Pololu Mini Pushbutton Power Switch with Reverse Voltage Protection, LV</a> bus uses the PEN RPi board pin.</p>
+<h4 id="Full-poweroff-&amp;-poweron-with-selection-buttons">Full poweroff &amp; poweron with selection buttons<a class="anchor-link" href="#Full-poweroff-&amp;-poweron-with-selection-buttons"> </a></h4><p><strong>Requires LEDs or display above</strong></p>
+<p><code>pigpio</code> use: great if this encourages the RPi Foundation to implement an I2C peripheral kernel driver &amp; coresponding dtoveray for the Broadcom SoC's secondary i2c controller!</p>
 
+</div>
+</div>
+</div>
 </div>
  
 
