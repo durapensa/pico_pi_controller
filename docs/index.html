@@ -37,7 +37,7 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Work in progress.</em> <em>See Hardware &amp; Software Instructions below.</em></p>
+<p><em>Work in progress.</em> <em>See Hardware &amp; <a href="#Hardware-&amp;-Software-Instructions">Software Instructions below</a>.</em></p>
 <ol>
 <li>The RPi* must have GPIO pins 18 &amp; 19 free for use by <code>pigpio</code> as SDA &amp; SCL of secondary i2c controller.</li>
 <li>RPi4 must have manual installaltion of <code>pigpio</code> for compatible i2c use.</li>
@@ -120,118 +120,34 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Module examples</p>
+<p>On each RPi, with <code>pigpiod</code> running, run this example <code>ppc-daemon.py</code> script:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pico_pi_controller</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Next">Next<a class="anchor-link" href="#Next"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>cleanup logging &amp; add more status types.</p>
-<p>add Pico initiated RPi shutdown, later poweroff (using PEN)</p>
-<ul>
-<li>if constant scanning of i2c is unworkable (mem frag from object create/delete), consider using button or message from RPi (specified RPi i2c address as 'console'?)</li>
-</ul>
-<p>logging with adafruit_logging.mpy</p>
-<p>expand LED status (NeoPixels)</p>
-<p>settings with config.py (just import the damed thing!) - less need with new classes</p>
-<p>add convention for RPi to report to Pico (over i2c) additional connections (gpio-poweroff, etc.), this to keep the Pico hands-off and config-free.</p>
-<p>notes: <a href="https://docs.micropython.org/en/latest/reference/mpyfiles.html">.mpy</a></p>
+<span class="n">mydevice</span> <span class="o">=</span> <span class="n">pico_pi_controller</span><span class="o">.</span><span class="n">PPPeripheral</span><span class="p">(</span><span class="mh">0x13</span><span class="p">)</span>
+</pre></div>
+<p>Where <code>0x13</code> is the chosen <em>unique</em> I2C address of your RPi on the I2C bus where an MCU controller is running (e.g. a Pico running <code>CircuitPython_pico_pi_controller</code>.</p>
+<p>A more sophisticated example:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pico_pi_controller</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Pseudo-code">Pseudo-code<a class="anchor-link" href="#Pseudo-code"> </a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><code>
-import adafruit_logging as logging
-import config
-...</p>
-<p>DEBUG = True
-LOGGING_LEVEL = logging.DEBUG
-BASE_SPEED = 0.5
-LOG_FILE = '/log.txt'
-logger.setLevel(config.LOGGING_LEVEL)
-&lt;/code&gt;</p>
-<p><a href="https://circuitpython.readthedocs.io/en/latest/shared-bindings/rtc/index.html">https://circuitpython.readthedocs.io/en/latest/shared-bindings/rtc/index.html</a>
-<code>
-    t = time.struct_time((2019,   7,    10,   17,  00,   0,    0,   -1,    -1))</p>
+<span class="n">address</span><span class="o">=</span><span class="mh">0x13</span>
 
-<pre><code># you must set year, mon, date, hour, min, sec and weekday
-# yearday is not supported
-# isdst can be set but we don't do anything with it at this time
-print("Setting time to:", t)     # uncomment for debugging
-rtc.datetime = t
-print("Done!")
-</code></pre>
-<p>&lt;/code&gt;</p>
+<span class="k">def</span> <span class="nf">i2c_peripheral</span><span class="p">(</span><span class="n">address</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">mydevice</span>
+    <span class="n">mydevice</span> <span class="o">=</span> <span class="n">pico_pi_controller</span><span class="o">.</span><span class="n">PPPeripheral</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;PPC: starting I2C peripheral &quot;</span><span class="p">,</span><span class="nb">hex</span><span class="p">(</span><span class="n">address</span><span class="p">))</span>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Future">Future<a class="anchor-link" href="#Future"> </a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Packaging">Packaging<a class="anchor-link" href="#Packaging"> </a></h3><p>RPi: project name: pico_pi_controller (daemon exists in examples/)</p>
-<p><a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> (does most of the stuff in the-hitchhikers-guide-to-packaging)</p>
-<p><a href="https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html">https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html</a></p>
-<p><a href="https://packaging.python.org/guides/using-manifest-in/">https://packaging.python.org/guides/using-manifest-in/</a></p>
-<p>Pico: project name: pico_pi_controller (use same name? simple program exists in code.py)</p>
-<p><a href="https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/creating-a-library">Creating a library</a> with <a href="https://cookiecutter.readthedocs.io/en/latest/">CookieCutter</a></p>
-<p><code>pip3 install cookiecutter</code>
-<code>cookiecutter gh:adafruit/cookiecutter-adafruit-circuitpython</code></p>
-<p>library_description: CircuitPython library for Pi SBCs to be monitored &amp; controlled by a microcontroller board, e.g. a Pi Pico, using i2c.</p>
-<p>library_keywords: i2c pico pi sensors system shutdown load wifi PowerENable</p>
-<p><a href="https://nbdev.fast.ai/">https://nbdev.fast.ai/</a> ?</p>
-<h3 id="Pico-LEDs-(using-NeoPixel-Stick,-strip,-string,-etc.)">Pico LEDs (using NeoPixel Stick, strip, string, etc.)<a class="anchor-link" href="#Pico-LEDs-(using-NeoPixel-Stick,-strip,-string,-etc.)"> </a></h3><p>status mode: (get from Keep), booting, power, heartbeat (require 3 misses?), wifi, etc.</p>
-<p>button activates selection mode, lights activate from 0 for each connected pi, dim green with a short off blink, all at the same time. bright solid green indicates the selected device (pi blinks something too?), power button will poweroff selected pi. power'd off pi blinks red, power button powers on pi.</p>
-<h3 id="Pico-display-(SPI-or-I2C)">Pico display (SPI or I2C)<a class="anchor-link" href="#Pico-display-(SPI-or-I2C)"> </a></h3><p>TBD: display status for one or more pi. auto-scaled to display size &amp; number of pi. hostname?</p>
-<p>future future: use for selection, fwd, back.</p>
-<h3 id="Pico-registry-of-connected-RPis">Pico registry of connected RPis<a class="anchor-link" href="#Pico-registry-of-connected-RPis"> </a></h3><p>2 modes, non-stored &amp; stored.</p>
-<p>Non-stored: Pico will register any connected Pi on first connect and remember until reset.</p>
-<p>Stored: Pico will will register any connected Pi on first connect and remember thru resets.</p>
-<p>See <a href="https://learn.adafruit.com/circuitpython-essentials/circuitpython-storage">CircuitPython Storage</a></p>
-<h3 id="Capabilities-with-other-hardware-add-ons">Capabilities with other hardware add-ons<a class="anchor-link" href="#Capabilities-with-other-hardware-add-ons"> </a></h3><h4 id="Safe-shutdown-&amp;-startup-with-a-single-button">Safe shutdown &amp; startup with a single button<a class="anchor-link" href="#Safe-shutdown-&amp;-startup-with-a-single-button"> </a></h4><p><strong>Can be used with single button for all connected RPis</strong>
-Configure from RPi? i2c reports the GPIOs connected on the Pico side.</p>
-<p>Pico 2 GPIO:</p>
-<p>On→Off: RPi GPIO 3 (pin 5) to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?</p>
-<p>Off→On: RPi GPIO 26 to GND, using any Pico GPIO, only when RPi in PPC registry is online
-use gpio-shutdown,gpio_pin=26,active_low=1,gpio_pull=up</p>
-<p>Pico 1 GPIO:</p>
-<p>On: RPi GPIO 3 to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?</p>
-<p>Off: use i2c command to trigger systemd shutdown</p>
-<h4 id="Full-poweroff-&amp;-poweron-with-a-single-button">Full poweroff &amp; poweron with a single button<a class="anchor-link" href="#Full-poweroff-&amp;-poweron-with-a-single-button"> </a></h4><p>On→Off:</p>
-<ol>
-<li>above (safe shtudown for raspian), then </li>
-<li><code>dtoverlay=gpio-poweroff,active_low,gpiopin=14</code> to detect completed shutdown</li>
-<li>PEN pull low</li>
-</ol>
-<p>Off→On</p>
-<ol>
-<li>detect state (PPC registry will have state of RPi's PEN)</li>
-<li>PEN open (power detectable on 3.3V, RPi should boot, reappear on i2c bus)</li>
-</ol>
-<p>If PEN is pulled low, then the PMIC shuts down the on-board power supplies in a controlled manner. The current consumption is limited to about 3mA (the PWR LED is still illuminated, and the pull-up on PEN consumes current). It is intended to be used in conjunction with an external board (HAT) that provides a UPS-like or battery-operated function.</p>
-<p>Works like the <a href="https://www.instructables.com/HOW-TO-TURN-OFF-RASPBERRY-PI-PROPERLY/">exampe</a> using a <a href="https://www.pololu.com/product/2808">Pololu Mini Pushbutton Power Switch with Reverse Voltage Protection, LV</a> bus uses the PEN RPi board pin.</p>
-<h4 id="Full-poweroff-&amp;-poweron-with-selection-buttons">Full poweroff &amp; poweron with selection buttons<a class="anchor-link" href="#Full-poweroff-&amp;-poweron-with-selection-buttons"> </a></h4><p><strong>Requires LEDs or display above</strong></p>
-<p><code>pigpio</code> use: great if this encourages the RPi Foundation to implement an I2C peripheral kernel driver &amp; coresponding dtoveray for the Broadcom SoC's secondary i2c controller!</p>
+<span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">i2c_peripheral</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">bosmang</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">UART_TX</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">UART_RX</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">PWR</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">PEN</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;PPC: last controller contact&quot;</span><span class="p">,</span><span class="n">mydevice</span><span class="o">.</span><span class="n">last_contact</span><span class="p">(),</span><span class="s2">&quot;seconds ago.&quot;</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+<p>When your device declares itself to be <em>bosmang</em>, it sends its own datetime for setting the controller's RTC. Optionally, a <em>bosmang</em> can send commands to the controller, e.g. to reboot or shutdown any connected RPi. Additionally, <em>bosmang</em> may have its console UART, gpio-poweroff, and PEN pins connected to GPIO pins on the controller which enables the controller to execute a safe shutdown &amp; poweroff plus full poweronn of <em>bosmang</em>.</p>
 
 </div>
 </div>

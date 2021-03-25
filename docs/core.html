@@ -6,8 +6,8 @@ title: pico_pi_controller
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A service interface for any Raspberry Pi like SBC to be monitored & controlled from a CircuitPython capable microcontroller."
-description: "A service interface for any Raspberry Pi like SBC to be monitored & controlled from a CircuitPython capable microcontroller."
+summary: "A service interface for a Raspberry Pi 2/3 to be monitored & controlled from a CircuitPython capable microcontroller. Use on a RPi 4 requires a solution to enable i2c perpheral support on RPi4."
+description: "A service interface for a Raspberry Pi 2/3 to be monitored & controlled from a CircuitPython capable microcontroller. Use on a RPi 4 requires a solution to enable i2c perpheral support on RPi4."
 nb_path: "00_core.ipynb"
 ---
 <!--
@@ -29,13 +29,6 @@ nb_path: "00_core.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This module also distributes the CircuitPython <code>code.py</code> file for a Raspberry Pi Pico configured as shown in the instructions below.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -47,7 +40,7 @@ nb_path: "00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="connect_mcu" class="doc_header"><code>connect_mcu</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/core.py#L6" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>connect_mcu</code>()</p>
+<h4 id="goodbye" class="doc_header"><code>goodbye</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/core.py#L13" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>goodbye</code>()</p>
 </blockquote>
 
 </div>
@@ -64,30 +57,29 @@ nb_path: "00_core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="PPC_Device_Daemon" class="doc_header"><code>class</code> <code>PPC_Device_Daemon</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/core.py#L24" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PPC_Device_Daemon</code>()</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>A fake test to trigger GitHub Actions CI</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">connect_mcu</span><span class="p">()</span>
-<span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
 
 </div>
     {% endraw %}

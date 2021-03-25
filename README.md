@@ -5,7 +5,7 @@
 ## Requirements
 
 
-*Work in progress.* *See Hardware & Software Instructions below.*
+*Work in progress.* *See Hardware & [Software Instructions below](#Hardware-&-Software-Instructions).*
 
 1. The RPi\* must have GPIO pins 18 & 19 free for use by `pigpio` as SDA & SCL of secondary i2c controller.
 2. RPi4 must have manual installaltion of `pigpio` for compatible i2c use.
@@ -51,135 +51,38 @@
 
 ## How to use
 
-Module examples
+On each RPi, with `pigpiod` running, run this example `ppc-daemon.py` script:
 
-## Next
+```python
+import pico_pi_controller
 
-cleanup logging & add more status types.
+mydevice = pico_pi_controller.PPPeripheral(0x13)
+```
 
-add Pico initiated RPi shutdown, later poweroff (using PEN)
+Where `0x13` is the chosen *unique* I2C address of your RPi on the I2C bus where an MCU controller is running (e.g. a Pico running `CircuitPython_pico_pi_controller`.
 
-* if constant scanning of i2c is unworkable (mem frag from object create/delete), consider using button or message from RPi (specified RPi i2c address as 'console'?)
+A more sophisticated example:
 
-logging with adafruit_logging.mpy
+```python
+import pico_pi_controller
+import time
+import threading
+import logging
+    
+address=0x13
+    
+def i2c_peripheral(address):
+    global mydevice
+    mydevice = pico_pi_controller.PPPeripheral(*args, **kwargs)
+    logging.info("PPC: starting I2C peripheral ",hex(address))
+    
+t = threading.Thread(target=i2c_peripheral(address, bosmang=True, UART_TX=8, UART_RX=9, PWR=10, PEN=11)
+threads.append(t)
+t.start()
 
-expand LED status (NeoPixels)
+while True:
+    logging.info("PPC: last controller contact",mydevice.last_contact(),"seconds ago.")
+    sleep(1)
+```
 
-settings with config.py (just import the damed thing!) - less need with new classes
-
-add convention for RPi to report to Pico (over i2c) additional connections (gpio-poweroff, etc.), this to keep the Pico hands-off and config-free.
-
-notes: [.mpy](https://docs.micropython.org/en/latest/reference/mpyfiles.html)
-
-### Pseudo-code
-
-<code>
-import adafruit_logging as logging
-import config
-...
-
-DEBUG = True
-LOGGING_LEVEL = logging.DEBUG
-BASE_SPEED = 0.5
-LOG_FILE = '/log.txt'
-logger.setLevel(config.LOGGING_LEVEL)
-</code>
-
-https://circuitpython.readthedocs.io/en/latest/shared-bindings/rtc/index.html
-<code>
-    t = time.struct_time((2019,   7,    10,   17,  00,   0,    0,   -1,    -1))
-    # you must set year, mon, date, hour, min, sec and weekday
-    # yearday is not supported
-    # isdst can be set but we don't do anything with it at this time
-    print("Setting time to:", t)     # uncomment for debugging
-    rtc.datetime = t
-    print("Done!")
-</code>
-
-## Future
-
-### Packaging
-
-RPi: project name: pico_pi_controller (daemon exists in examples/)
-
-https://nbdev.fast.ai/ (does most of the stuff in the-hitchhikers-guide-to-packaging) 
-
-https://the-hitchhikers-guide-to-packaging.readthedocs.io/en/latest/creation.html
-
-https://packaging.python.org/guides/using-manifest-in/
-
-Pico: project name: pico_pi_controller (use same name? simple program exists in code.py)
-
-[Creating a library](https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/creating-a-library) with [CookieCutter](https://cookiecutter.readthedocs.io/en/latest/)
-
-`pip3 install cookiecutter`
-`cookiecutter gh:adafruit/cookiecutter-adafruit-circuitpython`
-
-library_description: CircuitPython library for Pi SBCs to be monitored & controlled by a microcontroller board, e.g. a Pi Pico, using i2c.
-
-library_keywords: i2c pico pi sensors system shutdown load wifi PowerENable
-
-https://nbdev.fast.ai/ ?
-
-
-### Pico LEDs (using NeoPixel Stick, strip, string, etc.)
-
-status mode: (get from Keep), booting, power, heartbeat (require 3 misses?), wifi, etc.
-
-button activates selection mode, lights activate from 0 for each connected pi, dim green with a short off blink, all at the same time. bright solid green indicates the selected device (pi blinks something too?), power button will poweroff selected pi. power'd off pi blinks red, power button powers on pi.
-
-### Pico display (SPI or I2C)
-TBD: display status for one or more pi. auto-scaled to display size & number of pi. hostname?
-
-future future: use for selection, fwd, back.
-
-
-### Pico registry of connected RPis
-2 modes, non-stored & stored.
-
-Non-stored: Pico will register any connected Pi on first connect and remember until reset.
-
-Stored: Pico will will register any connected Pi on first connect and remember thru resets.
-
-See [CircuitPython Storage](https://learn.adafruit.com/circuitpython-essentials/circuitpython-storage)
-
-### Capabilities with other hardware add-ons
-
-#### Safe shutdown & startup with a single button
-
-**Can be used with single button for all connected RPis**
-Configure from RPi? i2c reports the GPIOs connected on the Pico side.
-
-
-Pico 2 GPIO:
-
-On→Off: RPi GPIO 3 (pin 5) to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?
-
-Off→On: RPi GPIO 26 to GND, using any Pico GPIO, only when RPi in PPC registry is online
-use gpio-shutdown,gpio_pin=26,active_low=1,gpio_pull=up
-
-Pico 1 GPIO:
-
-On: RPi GPIO 3 to GND, using any Pico GPIO, only when RPi in PPC registry is offline (assumed off), prime registry?
-
-Off: use i2c command to trigger systemd shutdown
-
-#### Full poweroff & poweron with a single button
-
-On→Off:
-1. above (safe shtudown for raspian), then 
-2. `dtoverlay=gpio-poweroff,active_low,gpiopin=14` to detect completed shutdown
-3. PEN pull low
-
-Off→On
-1. detect state (PPC registry will have state of RPi's PEN)
-2. PEN open (power detectable on 3.3V, RPi should boot, reappear on i2c bus)
-
-If PEN is pulled low, then the PMIC shuts down the on-board power supplies in a controlled manner. The current consumption is limited to about 3mA (the PWR LED is still illuminated, and the pull-up on PEN consumes current). It is intended to be used in conjunction with an external board (HAT) that provides a UPS-like or battery-operated function.
-
-Works like the [exampe](https://www.instructables.com/HOW-TO-TURN-OFF-RASPBERRY-PI-PROPERLY/) using a [Pololu Mini Pushbutton Power Switch with Reverse Voltage Protection, LV](https://www.pololu.com/product/2808) bus uses the PEN RPi board pin.
-
-#### Full poweroff & poweron with selection buttons
-**Requires LEDs or display above**
-
-`pigpio` use: great if this encourages the RPi Foundation to implement an I2C peripheral kernel driver & coresponding dtoveray for the Broadcom SoC's secondary i2c controller!
+When your device declares itself to be *bosmang*, it sends its own datetime for setting the controller's RTC. Optionally, a *bosmang* can send commands to the controller, e.g. to reboot or shutdown any connected RPi. Additionally, *bosmang* may have its console UART, gpio-poweroff, and PEN pins connected to GPIO pins on the controller which enables the controller to execute a safe shutdown & poweroff plus full poweronn of *bosmang*.
