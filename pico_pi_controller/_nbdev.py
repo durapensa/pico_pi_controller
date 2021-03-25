@@ -3,7 +3,7 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"goodbye": "00_core.ipynb",
-         "PPC_Device_Daemon": "00_core.ipynb"}
+         "PPDeviceDaemon": "00_core.ipynb"}
 
 modules = ["core.py"]
 
