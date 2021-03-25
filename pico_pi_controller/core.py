@@ -3,15 +3,17 @@
 __all__ = ['PPC_Device_Daemon']
 
 # Cell
+from platform import node
+from os import getloadavg
+from sys import byteorder
 import time
-import atexit
 import pigpio
+import atexit
 
-#export
 class PPC_Device_Daemon():
     def __init__(self):
         I2C_ADDR=0x13
-        IDENTITY = bytearray('ppc-daemon','ascii')
+        IDENTITY = bytearray('ppdd','ascii')
         IDF = bytearray('I','ascii')
         HOS = bytearray('H','ascii')
         LOD = bytearray('L','ascii')
@@ -44,7 +46,6 @@ class PPC_Device_Daemon():
         s, b, d = pi.bsc_i2c(I2C_ADDR)
         if b:
             load = bytearray("{:04.2f}".format(getloadavg()[0]),'utf-8')
-            #load = bytearray(str(getloadavg()[0]),'utf-8')
             if d[0] == int.from_bytes(IDF, byteorder=byteorder):
                 print ("IDF recieved, sending identity:",IDENTITY.decode(),"on tick",tick)
                 s, b, d = pi.bsc_i2c(I2C_ADDR,IDENTITY)
