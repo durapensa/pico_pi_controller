@@ -13,8 +13,8 @@ entries:
       title: pico_pi_controller
       url: core.html
     - output: web,pdf
-      title: pico_pi_controller.daemon
-      url: daemon.html
+      title: pico_pi_controller.ppdd
+      url: ppdd.html
     output: web
     title: pico_pi_controller
   output: web
