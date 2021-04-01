@@ -1,6 +1,7 @@
 {
   "pico_pi_controller": {
     "Overview": "/",
-    "pico_pi_controller": "core.html"
+    "pico_pi_controller": "core.html",
+    "pico_pi_controller.daemon": "daemon.html"
   }
 }

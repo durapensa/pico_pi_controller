@@ -2,10 +2,18 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"goodbye": "00_core.ipynb",
-         "PPDeviceDaemon": "00_core.ipynb"}
+index = {"PwrLedFlicker": "00_core.ipynb",
+         "REG_NAME": "00_core.ipynb",
+         "empty": "00_core.ipynb",
+         "pause": "00_core.ipynb",
+         "hostname": "00_core.ipynb",
+         "bosmang": "00_core.ipynb",
+         "cmd_code": "00_core.ipynb",
+         "i2c_event_handler": "50_daemon.ipynb",
+         "main": "50_daemon.ipynb"}
 
-modules = ["core.py"]
+modules = ["core.py",
+           "daemon.py"]
 
 doc_url = "https://durapensa.github.io/pico_pi_controller/"
 
