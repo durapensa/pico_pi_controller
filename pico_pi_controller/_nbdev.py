@@ -10,6 +10,7 @@ index = {"logger": "50_ppdd.ipynb",
          "empty": "50_ppdd.ipynb",
          "pause": "50_ppdd.ipynb",
          "hostname": "50_ppdd.ipynb",
+         "bosmang": "50_ppdd.ipynb",
          "cmd_code": "50_ppdd.ipynb",
          "REG_NAME": "50_ppdd.ipynb",
          "REG_INT": "50_ppdd.ipynb"}
