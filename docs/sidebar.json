@@ -2,6 +2,7 @@
   "pico_pi_controller": {
     "Overview": "/",
     "pico_pi_controller": "core.html",
-    "pico_pi_controller.ppdd": "ppdd.html"
+    "pico_pi_controller.ppdd": "ppdd.html",
+    "pico_pi_controller.ppcc": "ppcc.html"
   }
 }

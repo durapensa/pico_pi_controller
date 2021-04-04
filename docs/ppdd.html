@@ -47,7 +47,7 @@ nb_path: "50_ppdd.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="log_txn" class="doc_header"><code>log_txn</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L39" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>log_txn</code>(<strong><code>fname</code></strong>, <strong><code>message</code></strong>, <strong><code>msg</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="log_txn" class="doc_header"><code>log_txn</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>log_txn</code>(<strong><code>fname</code></strong>, <strong><code>message</code></strong>, <strong><code>msg</code></strong>=<em><code>None</code></em>)</p>
 </blockquote>
 <p>Wrapper for logger.</p>
 
@@ -72,7 +72,7 @@ nb_path: "50_ppdd.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="PwrLedFlicker" class="doc_header"><code>class</code> <code>PwrLedFlicker</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L45" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PwrLedFlicker</code>(<strong><code>duration</code></strong>) :: <code>Thread</code></p>
+<h2 id="PwrLedFlicker" class="doc_header"><code>class</code> <code>PwrLedFlicker</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L44" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PwrLedFlicker</code>(<strong><code>duration</code></strong>) :: <code>Thread</code></p>
 </blockquote>
 <p>A class that represents a thread of control.</p>
 <p>This class can be safely subclassed in a limited fashion. There are two ways
@@ -100,7 +100,57 @@ by overriding the run() method in a subclass.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="i2c_event_handler" class="doc_header"><code>i2c_event_handler</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L65" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>i2c_event_handler</code>(<strong><code>id</code></strong>, <strong><code>tick</code></strong>)</p>
+<h2 id="PPCcHandler" class="doc_header"><code>class</code> <code>PPCcHandler</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L64" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PPCcHandler</code>(<strong><code>request</code></strong>, <strong><code>client_address</code></strong>, <strong><code>server</code></strong>) :: <code>StreamRequestHandler</code></p>
+</blockquote>
+<p>Define self.rfile and self.wfile for stream sockets.</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="goodbye" class="doc_header"><code>goodbye</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L72" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>goodbye</code>()</p>
+</blockquote>
+<p>Cancel pigpio event handler, close I2C peripheral &amp; connection to pigpio</p>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="i2c_event_handler" class="doc_header"><code>i2c_event_handler</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L92" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>i2c_event_handler</code>(<strong><code>id</code></strong>, <strong><code>tick</code></strong>)</p>
 </blockquote>
 <p>Copied from local ppdd.py.</p>
 
@@ -125,7 +175,7 @@ by overriding the run() method in a subclass.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="main" class="doc_header"><code>main</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L145" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>main</code>()</p>
+<h4 id="main" class="doc_header"><code>main</code><a href="https://github.com/durapensa/pico_pi_controller/tree/main/pico_pi_controller/ppdd.py#L172" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>main</code>()</p>
 </blockquote>
 
 </div>
